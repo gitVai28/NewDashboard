@@ -1,13 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 const LeftSidebar = () => {
-  const [filters, setFilters] = useState({
-    disasterType: '',
-    location: '',
-  });
-
-  const [summaries, setSummaries] = useState([]);
-
   // Updated sample JSON data
   const jsonData = [
     {
@@ -37,41 +30,6 @@ const LeftSidebar = () => {
     }
   ];
 
-  // List of Indian states
-  const indianStates = [
-    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-    "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
-    "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur",
-    "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
-    "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura",
-    "Uttar Pradesh", "Uttarakhand", "West Bengal"
-  ];
-
-  // Extract unique disaster types
-  const disasterTypes = [...new Set(jsonData.map(item => item.DisasterType))];
-
-  useEffect(() => {
-    filterSummaries();
-  }, [filters]);
-
-  const handleFilterChange = (event) => {
-    const { name, value } = event.target;
-    setFilters(prevFilters => ({
-      ...prevFilters,
-      [name]: value
-    }));
-  };
-
-  const filterSummaries = () => {
-    const filteredSummaries = jsonData.filter(item => {
-      return (
-        (filters.disasterType === '' || item.DisasterType === filters.disasterType) &&
-        (filters.location === '' || item.Location === filters.location)
-      );
-    });
-    setSummaries(filteredSummaries);
-  };
-
   const sidebarStyle = {
     backgroundColor: '#ffffff',
     color: '#333333',
@@ -81,26 +39,6 @@ const LeftSidebar = () => {
     display: 'flex',
     flexDirection: 'column',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  };
-
-  const filterStyle = {
-    marginBottom: '15px',
-  };
-
-  const labelStyle = {
-    display: 'block',
-    marginBottom: '5px',
-    color: '#555555',
-    fontWeight: 'bold',
-  };
-
-  const selectStyle = {
-    width: '100%',
-    padding: '8px',
-    backgroundColor: '#f0f0f0',
-    color: '#333333',
-    border: '1px solid #cccccc',
-    borderRadius: '4px',
   };
 
   const summaryBoxStyle = {
@@ -129,45 +67,10 @@ const LeftSidebar = () => {
 
   return (
     <div style={sidebarStyle}>
-      <h2 style={{ marginBottom: '20px', fontSize: '1.5em', color: '#333333' }}>Filters</h2>
+      <h2 style={{ marginBottom: '20px', fontSize: '1.5em', color: '#333333' }}>Disaster Summaries</h2>
       
-      <div style={filterStyle}>
-        <label htmlFor="disasterType" style={labelStyle}>Type of Disaster</label>
-        <select
-          id="disasterType"
-          name="disasterType"
-          value={filters.disasterType}
-          onChange={handleFilterChange}
-          style={selectStyle}
-        >
-          <option value="">All Disaster Types</option>
-          {disasterTypes.map((type, index) => (
-            <option key={index} value={type} style={{color: getDisasterTypeColor(type)}}>
-              {type}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div style={filterStyle}>
-        <label htmlFor="location" style={labelStyle}>Location</label>
-        <select
-          id="location"
-          name="location"
-          value={filters.location}
-          onChange={handleFilterChange}
-          style={selectStyle}
-        >
-          <option value="">All Locations</option>
-          {indianStates.map((state, index) => (
-            <option key={index} value={state}>{state}</option>
-          ))}
-        </select>
-      </div>
-
-      <h3 style={{ marginTop: '20px', marginBottom: '10px', color: '#333333' }}>Summaries</h3>
       <div style={summariesContainerStyle}>
-        {summaries.map((item, index) => (
+        {jsonData.map((item, index) => (
           <div key={index} style={summaryBoxStyle}>
             <p style={{ color: getDisasterTypeColor(item.DisasterType), fontWeight: 'bold' }}>
               {item.DisasterType} - {item.Location}
